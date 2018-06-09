@@ -6,6 +6,6 @@ import LoginScreen from './screens/Login'
 const RootStack = createStackNavigator({
   Login: LoginScreen,
   Papan: PapanScreen
-}, { initialRouteName: 'Papan' })
+}, { initialRouteName: 'Login' })
 
 export default RootStack

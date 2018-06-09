@@ -38,9 +38,12 @@ class LoginScreen extends React.Component {
         <TextInput
           style={styles.input}
           onChangeText={(nama) => this.getNama(nama)} />
-        <Button
-          title="Mulai"
-          onPress={this.goToGame} />
+        <View style={styles.containerButton}>
+          <Button
+            style={styles.button}
+            title="Mulai"
+            onPress={this.goToGame} />
+        </View>
       </View>
     )
   }
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   input: {
-    height: 40,
+    height: 50,
     width: 280,
     fontSize: 18,
     padding: 10,
@@ -71,6 +74,21 @@ const styles = StyleSheet.create({
         }
       }
     )
+  },
+  containerButton: {
+    padding: 10,
+    backgroundColor: 'orange',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+    marginRight: 20,
+    marginLeft: 20
+  },
+  button: {
+    color: 'white',
+    borderWidth: 1,
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 })
 
