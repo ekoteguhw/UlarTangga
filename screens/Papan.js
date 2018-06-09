@@ -1,8 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View, Button, Platform } from 'react-native'
-import { Kotak } from '../components/Kotak'
 
 class PapanScreen extends React.Component {
+
+  static navigationOptions = {
+    title: 'Game'
+  }
 
   constructor() {
     super()
@@ -13,14 +16,32 @@ class PapanScreen extends React.Component {
       status: false
     }
 
-    this.lemparDadu = this.lemparDadu.bind(this)
     this.hitungMundur = this.hitungMundur.bind(this)
+    this.lemparDadu = this.lemparDadu.bind(this)
   }
 
-  hitungMundur() {
-    this.setState({
-      timer: timer - 1
-    })
+  componentDidMount() {
+    setInterval(() => {
+      this.hitungMundur(this.state.timer)
+    }, 1000);
+  }
+
+  componentWillMount() {
+    this.hitungMundur(this.state.timer)
+  }
+
+  hitungMundur(timer) {
+    if (timer <= 0) {
+      alert('Game Over! Anda gagal memenangkan game ini.')
+      this.props.navigation.navigate('Login')
+      this.setState({
+        timer: 20
+      })
+    } else {
+      this.setState({
+        timer: timer - 1
+      })
+    }
   }
 
   lemparDadu() {
@@ -59,21 +80,32 @@ class PapanScreen extends React.Component {
         random: 0,
         status: false
       })
-    } else if (timer == 0) {
-      alert('Game Over! Anda gagal memenangkan game ini.')
     }
   }
 
-  printKotak(index) {
-    return (
-      <Kotak index={index} />
-    )
+  jumlahKotak() {
+    const numbers = []
+    let index = 1;
+
+    while (index <= 20) {
+      numbers.push(index)
+      index++
+    }
+
+    return numbers;
   }
 
   render() {
 
-    const nama = this.props.navigation.getParam('nama', 'anonymous')
-    const { posisi, random } = this.state
+    const nama = this.props.navigation.getParam('nama', 'Anonymous')
+    const { posisi, random, timer } = this.state
+    const numbers = []
+    let index = 1;
+
+    while (index <= 20) {
+      numbers.push(index)
+      index++
+    }
 
     return (
       <View style={styles.container}>
@@ -81,14 +113,28 @@ class PapanScreen extends React.Component {
           <Text style={styles.nama}>{nama}</Text>
         </View>
         <View style={styles.containerKotak}>
-
+          {
+            numbers.map(number => {
+              <View row>
+                <View style={styles.kotak}>
+                  {
+                    posisi == number ? <Text style={styles.posisiNow}>{number}</Text>
+                      :
+                      <Text style={styles.number}>{number}</Text>
+                  }
+                </View>
+              </View>
+            })
+          }
         </View>
         <View style={styles.containerDadu}>
-          <Text style={styles.dadu}>Dadu: {random}</Text>
-          <Text style={styles.posisi}>Posisi: {posisi}</Text>
+          <Text style={styles.dadu}>Dadu {'\n'}{random}</Text>
+          <Text style={styles.timer}>{'\n'}{timer}</Text>
+          <Text style={styles.posisi}>Posisi {'\n'}{posisi}</Text>
         </View>
         <View style={styles.containerButton}>
           <Button
+            style={styles.button}
             title="Lempar Dadu"
             onPress={this.lemparDadu} />
         </View>
@@ -101,47 +147,94 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   containerNama: {
     flex: 1,
     flexDirection: 'row',
-    margin: 20,
-    height: 100,
+    margin: 10,
+    height: 50
   },
   nama: {
     fontSize: 24,
     justifyContent: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: 'bold'
   },
   containerKotak: {
-    flex: 3,
-    flexDirection: 'row',
-    margin: 20,
-    height: 300,
-  },
-  containerDadu: {
-    flex: 1,
+    flex: 5,
     flexDirection: 'row',
     margin: 10,
-    height: 100
+    borderColor: 'gray',
+    justifyContent: 'center',
+    borderWidth: 1,
+    alignSelf: 'stretch',
+    padding: 10,
+  },
+  containerDadu: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    margin: 10,
+    alignSelf: 'stretch',
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
   },
   dadu: {
+    flex: 1,
     fontSize: 24,
-    textAlign: 'left'
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  timer: {
+    flex: 1,
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center'
   },
   posisi: {
+    flex: 1,
     fontSize: 24,
-    textAlign: 'right'
+    textAlign: 'center',
+    textAlignVertical: 'center'
   },
   containerButton: {
     flex: 1,
     flexDirection: 'row',
+    padding: 10,
+    backgroundColor: 'orange',
+    alignItems: 'center',
     justifyContent: 'center',
-    height: 10
+    alignSelf: 'stretch',
+    margin: 10
   },
+  button: {
+    color: 'white',
+    borderWidth: 1,
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  kotak: {
+    width: 50,
+    height: 50,
+    backgroundColor: 'white',
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  number: {
+    fontSize: 18,
+    textAlignVertical: 'center',
+    textAlign: 'center'
+  },
+  posisiNow: {
+    fontSize: 18,
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    backgroundColor: 'red'
+  }
 })
 
 export default PapanScreen
