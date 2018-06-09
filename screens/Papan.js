@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Button, Platform } from 'react-native'
+import ListKotak from '../components/ListKotak'
 
 class PapanScreen extends React.Component {
 
@@ -115,13 +116,6 @@ class PapanScreen extends React.Component {
 
     const nama = this.props.navigation.getParam('nama', 'Anonymous')
     const { posisi, random, timer, pesan, status } = this.state
-    const numbers = []
-    let index = 1;
-
-    while (index <= 20) {
-      numbers.push(index)
-      index++
-    }
 
     return (
       <View style={styles.container}>
@@ -129,17 +123,7 @@ class PapanScreen extends React.Component {
           <Text style={styles.nama}>{nama}</Text>
         </View>
         <View style={styles.containerKotak}>
-          {
-            numbers.map(number => {
-              <View style={styles.kotak}>
-                {
-                  posisi == number ? <Text style={styles.posisiNow}>{number}</Text>
-                    :
-                    <Text style={styles.number}>{number}</Text>
-                }
-              </View>
-            })
-          }
+          <ListKotak posisi={posisi} />
         </View>
         {
           status == false && <View style={styles.containerPesan}>
@@ -227,7 +211,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     padding: 10,
-    backgroundColor: 'orange',
+    ...Platform.select({
+      ios: {
+        backgroundColor: 'orange',
+      }
+    }),
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',

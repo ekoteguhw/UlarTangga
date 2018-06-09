@@ -1,41 +1,28 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-export default class Kotak extends React.Component {
-  render() {
-    const { posisi } = this.props
-    const numbers = []
-    let index = 1;
+const Kotak = (props) => {
 
-    while (index <= 20) {
-      numbers.push(index)
-      index++
-    }
+  const { numbers, posisi } = props
 
-    return (
-      <View>
-        {
-          numbers.map(number => {
-            <View row>
-              <View style={styles.kotak}>
-                {
-                  posisi == number ? <Text style={styles.posisi}>{number}</Text>
-                    :
-                    <Text style={styles.number}>{number}</Text>
-                }
-              </View>
-            </View>
-          })
-        }
-      </View>
-    )
-  }
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      {
+        numbers.map((number, index) => number == posisi ? <View style={styles.posisi} key={index}>
+          <Text style={styles.number}>{number}</Text>
+        </View> :
+          <View style={styles.kotak} key={index}>
+            <Text style={styles.number}>{number}</Text>
+          </View>)
+      }
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
   kotak: {
-    width: 55,
-    height: 55,
+    width: 50,
+    height: 50,
     backgroundColor: 'white',
     borderColor: 'gray',
     borderWidth: 1,
@@ -46,9 +33,12 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   posisi: {
-    fontSize: 18,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    backgroundColor: 'red'
+    width: 50,
+    height: 50,
+    backgroundColor: 'red',
+    borderColor: 'gray',
+    borderWidth: 1,
   }
 })
+
+export default Kotak

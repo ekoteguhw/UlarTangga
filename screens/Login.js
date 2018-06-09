@@ -77,7 +77,11 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     padding: 10,
-    backgroundColor: 'orange',
+    ...Platform.select({
+      ios: {
+        backgroundColor: 'orange',
+      }
+    }),
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
