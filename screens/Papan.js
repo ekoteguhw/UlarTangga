@@ -23,15 +23,13 @@ class PapanScreen extends React.Component {
   }
 
   componentDidMount() {
-    /*
     setInterval(() => {
       this.hitungMundur(this.state.timer)
     }, 1000);
-    */
   }
 
   componentWillMount() {
-    //this.hitungMundur(this.state.timer)
+    this.hitungMundur(this.state.timer)
   }
 
   hitungMundur(timer) {
