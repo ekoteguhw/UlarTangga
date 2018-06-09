@@ -23,34 +23,31 @@ class PapanScreen extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(() => {
-      this.hitungMundur(this.state.timer)
+    let intervalId = setInterval(() => {
+      this.hitungMundur()
     }, 1000);
+    this.setState({ intervalId: intervalId })
   }
 
-  componentWillMount() {
-    this.hitungMundur(this.state.timer)
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId)
   }
 
-  hitungMundur(timer) {
-    if (timer <= 0) {
-      alert('Game Over! Anda gagal memenangkan game ini.')
-      this.props.navigation.navigate('Login')
+  hitungMundur() {
+    let newTimer = this.state.timer - 1
+    if (newTimer >= 0) {
       this.setState({
-        timer: 20
+        timer: newTimer
       })
     } else {
-      this.setState({
-        timer: timer - 1
-      })
+      alert('Game Over! Anda gagal memenangkan game ini.')
+      this.props.navigation.navigate('Login')
+      clearInterval(this.state.intervalId)
     }
   }
 
   lemparDadu() {
-    let posisi = this.state.posisi
-    let status = this.state.status
-    let timer = this.state.timer
-    let pesan = this.state.pesan
+    let { posisi, status, timer, pesan } = this.state
     let random = Math.floor(Math.random() * 6 + 1)
     posisi += random
 
@@ -98,18 +95,6 @@ class PapanScreen extends React.Component {
     }
   }
 
-  jumlahKotak() {
-    const numbers = []
-    let index = 1;
-
-    while (index <= 20) {
-      numbers.push(index)
-      index++
-    }
-
-    return numbers;
-  }
-
   render() {
 
     const nama = this.props.navigation.getParam('nama', 'Anonymous')
@@ -129,9 +114,9 @@ class PapanScreen extends React.Component {
           </View>
         }
         <View style={styles.containerDadu}>
-          <Text style={styles.dadu}>Dadu {'\n'}{random}</Text>
-          <Text style={styles.timer}>{'\n'}{timer}</Text>
-          <Text style={styles.posisi}>Posisi {'\n'}{posisi}</Text>
+          <Text style={styles.textDadu}>Dadu {'\n'}{random}</Text>
+          <Text style={styles.textDadu}>Timer {'\n'}{timer}</Text>
+          <Text style={styles.textDadu}>Posisi {'\n'}{posisi}</Text>
         </View>
         <View style={styles.containerButton}>
           <Button
@@ -178,7 +163,7 @@ const styles = StyleSheet.create({
   containerDadu: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     marginLeft: 10,
     marginRight: 10,
     alignSelf: 'stretch',
@@ -186,24 +171,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-  dadu: {
-    flex: 1,
-    fontSize: 18,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-  },
-  timer: {
+  textDadu: {
     flex: 1,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    textAlignVertical: 'center'
-  },
-  posisi: {
-    flex: 1,
-    fontSize: 18,
-    textAlign: 'center',
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
   containerButton: {
     flex: 1,
@@ -240,24 +213,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
     color: 'white'
-  },
-  kotak: {
-    width: 50,
-    height: 50,
-    backgroundColor: 'white',
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  number: {
-    fontSize: 18,
-    textAlignVertical: 'center',
-    textAlign: 'center'
-  },
-  posisiNow: {
-    fontSize: 18,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    backgroundColor: 'red'
   }
 })
 
